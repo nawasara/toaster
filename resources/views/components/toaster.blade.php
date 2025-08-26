@@ -56,8 +56,6 @@
             init() {},
 
             addToast(options) {
-                console.log('Toast event received:', options);
-
                 const toast = {
                     id: this.nextId++,
                     type: options.type || 'info',
@@ -76,13 +74,11 @@
 
                 this.toasts.push(toast);
                 setTimeout(() => {
-                    // toast.visible = true;
                     this.toasts = this.toasts.map(t => t.id === toast.id ? {
                         ...t,
                         visible: true
                     } : t);
 
-                    console.log(toast);
                     this.startTimer(toast);
                 }, 100);
             },
