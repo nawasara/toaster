@@ -107,8 +107,20 @@
                 if (toast.showProgress) {
                     const progressStep = 100 / (toast.duration / 100);
                     toast.progressTimer = setInterval(() => {
-                        toast.progress -= progressStep;
-                        if (toast.progress <= 0) {
+                        // Reassign toast object for Alpine reactivity
+                        this.toasts = this.toasts.map(t => {
+                            if (t.id === toast.id) {
+                                let newProgress = t.progress - progressStep;
+                                if (newProgress < 0) newProgress = 0;
+                                return {
+                                    ...t,
+                                    progress: newProgress
+                                };
+                            }
+                            return t;
+                        });
+                        const currentToast = this.toasts.find(t => t.id === toast.id);
+                        if (currentToast && currentToast.progress <= 0) {
                             clearInterval(toast.progressTimer);
                         }
                     }, 100);
