@@ -16,6 +16,8 @@
         ...options,
       };
 
+      console.log(toastData);
+
       window.dispatchEvent(
         new CustomEvent("toast", {
           detail: toastData,

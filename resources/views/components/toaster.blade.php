@@ -3,7 +3,7 @@
     maxToasts: {{ $maxToasts }},
     stackable: {{ $stackable ? 'true' : 'false' }},
     showProgress: {{ $showProgress ? 'true' : 'false' }}
-})" x-init="init()" @toast.window="addToast($event.detail)"
+})" x-init="init()" @toast.window="addToast($event)"
     class="fixed z-50 {{ $getPositionClasses() }}">
     <div class="space-y-3 max-w-xs w-full">
         <template x-for="toast in toasts" :key="toast.id">
@@ -55,18 +55,39 @@
 
             init() {},
 
-            addToast(options) {
+            addToast(eventOrDetail) {
+                console.log('Received toast event:', eventOrDetail);
+                // Normalize payload: accept either full event ($event) or detail ($event.detail)
+                let options = eventOrDetail;
+                if (options && options.detail) options = options.detail;
+                if (options && options.payload) options = options.payload;
+
+                // If a plain string was passed, treat it as the message
+                if (typeof options === 'string') {
+                    options = {
+                        message: options
+                    };
+                } else if (Array.isArray(options)) {
+                    options = options[0];
+                    console.log('options', options);
+                }
+
                 const toast = {
                     id: this.nextId++,
-                    type: options.type || 'info',
-                    message: options.message,
-                    duration: options.duration ?? this.config.duration,
+                    type: (options && options.type) ? options.type : 'info',
+                    message: options && (options.message ?? options.msg ?? options.text) ? (options.message ??
+                        options.msg ?? options.text) : '',
+                    duration: options && (options.duration ?? this.config.duration) ? (options.duration ?? this
+                        .config.duration) : this.config.duration,
                     visible: false,
                     progress: 100,
-                    showProgress: options.showProgress ?? this.config.showProgress,
+                    showProgress: options && (options.showProgress ?? this.config.showProgress) ? (options
+                        .showProgress ?? this.config.showProgress) : this.config.showProgress,
                     timer: null,
                     progressTimer: null
                 };
+
+                console.log('Adding toast:', toast);
 
                 if (this.config.stackable && this.toasts.length >= this.config.maxToasts) {
                     this.removeOldestToast();

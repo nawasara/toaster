@@ -40,3 +40,27 @@ session()->flash("toast", [
 ✅ Customizable Themes
 
 Made with ❤️ for Laravel 12
+
+## Livewire Integration
+
+You can dispatch toasts directly from Livewire components using the provided trait `Nawasara\Toaster\Concerns\HasToaster`.
+
+Example:
+
+```php
+use Livewire\Component;
+use Nawasara\Toaster\Concerns\HasToaster;
+
+class MyComponent extends Component
+{
+    use HasToaster;
+
+    public function save()
+    {
+        // ... do save
+        $this->alert('success', 'Saved successfully');
+    }
+}
+```
+
+This trait will call `dispatchBrowserEvent('toast', $payload)` so the client-side toaster will receive the event and show notification immediately without a full page reload.
