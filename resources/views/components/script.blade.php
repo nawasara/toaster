@@ -6,6 +6,10 @@
             window.Laravel.toast = @json(session('toast'));
         </script>
     @endif
-    <script src="{{ asset('vendor/nawasara-toaster/js/toaster.js') }}"></script>
+    @php
+        $toasterPath = public_path('vendor/nawasara-toaster/js/toaster.js');
+        $toasterVersion = file_exists($toasterPath) ? '?v=' . filemtime($toasterPath) : '';
+    @endphp
+    <script src="{{ asset('vendor/nawasara-toaster/js/toaster.js') }}{{ $toasterVersion }}"></script>
     {{-- End Toaster --}}
 </div>
