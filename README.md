@@ -1,51 +1,60 @@
-# Nawasara Toaster Package
+# Nawasara Toaster
 
-Professional toast notifications for Laravel 12 with Alpine.js and Tailwind CSS.
-
-## Installation
-
-1. Run: `php generate-toaster-files.php`
-2. Run: `composer dump-autoload && composer require nawasara/toaster`
-3. Update `tailwind.config.js` with package path
-4. Update main layout with `<x-nawasara-toaster::toaster />`
-5. Run: `npm run build`
-6. Test: Visit `/test-toaster`
-
-## Usage
-
-```javascript
-Toast.success("Success message!");
-Toast.error("Error message!");
-Toast.warning("Warning message!");
-Toast.info("Info message!");
-```
-
-```php
-session()->flash("toast", [
-    "type" => "success",
-    "message" => "Laravel flash message!"
-]);
-```
+Lightweight, Alpine-based toast notification component for Laravel and Livewire applications. Drop one component into your layout and trigger toasts from JavaScript, Livewire, or session flash.
 
 ## Features
 
-✅ 4 Toast Types (Success, Error, Warning, Info)
-✅ 9 Position Options  
-✅ Progress Bar Support
-✅ Dark Mode Compatible
-✅ Mobile Responsive
-✅ Alpine.js Integration
-✅ Laravel Flash Messages
-✅ AJAX/Promise Support
-✅ Customizable Themes
+- **Four toast types** — success, error, warning, info
+- **Configurable position** — nine corner/edge anchors
+- **Progress bar** — optional countdown indicator
+- **Dark-mode aware** — respects the host application's theme
+- **Mobile responsive**
+- **Triggers from anywhere** — JavaScript (`window.Toast`), Livewire dispatch, or Laravel session flash
+- **Auto-init from flash** — shows the toast on next page load when redirected with a flash payload
 
-Made with ❤️ for Laravel 12
+## Installation
 
-## Livewire Integration
+```bash
+composer require nawasara/toaster
+```
 
-You can dispatch toasts directly from Livewire components using the provided trait `Nawasara\Toaster\Concerns\HasToaster`.
+Auto-discovered. Drop the toaster + script components into your layout:
 
-Example:
+```blade
+<x-nawasara-toaster::script />
+
+{{-- … your content … --}}
+
+<x-nawasara-toaster::toaster position="top-right" :duration="5000" />
+```
+
+## Usage
+
+### From JavaScript
+
+```js
+window.Toast.success('Saved successfully');
+window.Toast.error('Something went wrong');
+window.Toast.warning('Heads up');
+window.Toast.info('FYI');
+```
+
+### From Laravel session flash
+
+```php
+session()->flash('toast', [
+    'type' => 'success',
+    'message' => 'Saved successfully',
+]);
+
+return redirect()->back();
+```
+
+The toaster auto-loads the flash payload via `window.Laravel.toast` on the next page render.
+
+### From Livewire
+
+Use the `HasToaster` trait if you prefer session-flash style (works after a redirect):
 
 ```php
 use Livewire\Component;
@@ -57,10 +66,18 @@ class MyComponent extends Component
 
     public function save()
     {
-        // ... do save
+        // …
         $this->alert('success', 'Saved successfully');
     }
 }
 ```
 
-This trait will call `dispatchBrowserEvent('toast', $payload)` so the client-side toaster will receive the event and show notification immediately without a full page reload.
+For real-time toasts inside the same Livewire request (no page reload), use `Nawasara\Ui\Livewire\Concerns\HasBrowserToast` from `nawasara/ui` — it dispatches a browser `toast` event the toaster listens to.
+
+## Author
+
+**Pringgo J. Saputro** &lt;odyinggo@gmail.com&gt;
+
+## License
+
+MIT
