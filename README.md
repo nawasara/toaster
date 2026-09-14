@@ -4,13 +4,13 @@ Lightweight, Alpine-based toast notification component for Laravel and Livewire 
 
 ## Features
 
-- **Four toast types** — success, error, warning, info
-- **Configurable position** — nine corner/edge anchors
-- **Progress bar** — optional countdown indicator
-- **Dark-mode aware** — respects the host application's theme
-- **Mobile responsive**
-- **Triggers from anywhere** — JavaScript (`window.Toast`), Livewire dispatch, or Laravel session flash
-- **Auto-init from flash** — shows the toast on next page load when redirected with a flash payload
+- Four toast types: success, error, warning, info
+- Configurable position: nine corner/edge anchors
+- Optional progress bar countdown indicator
+- Dark-mode aware: respects the host application's theme
+- Mobile responsive
+- Triggers from anywhere: JavaScript (`window.Toast`), Livewire dispatch, or Laravel session flash
+- Auto-init from flash: shows the toast on the next page load when you redirect with a flash payload
 
 ## Installation
 
@@ -72,7 +72,7 @@ class MyComponent extends Component
 }
 ```
 
-For real-time toasts inside the same Livewire request (no page reload), use `Nawasara\Ui\Livewire\Concerns\HasBrowserToast` from `nawasara/ui` — it dispatches a browser `toast` event the toaster listens to.
+For real-time toasts inside the same Livewire request (no page reload), use `Nawasara\Ui\Livewire\Concerns\HasBrowserToast` from `nawasara/ui`. It dispatches a browser `toast` event that the toaster listens to.
 
 ## Author
 
